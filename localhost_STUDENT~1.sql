@@ -1,0 +1,35 @@
+-- ÇÐ»ýÅ×ÀÌºí¿¡¼­Áßº¹µÇ´ÂÇÐ°ú¹øÈ£(deptno)¸¦Á¦¿ÜÇÏ°í­t·ÂÇÏ¿©¶ó
+SELECT DISTINCT DEPTNO FROM STUDENT;
+
+-- ºÎ¼­Å×ÀÌºí¿¡¼­ºÎ¼­ÀÌ¸§Ä®·³ÀÇº°¸íÀºdept_name, ºÎ¼­¹øÈ£Ä®·³ÀÇº°¸íÀºDNÀ¸·ÎºÎ¿©ÇÏ¿©­t·ÂÇÏ¿©¶ó
+SELECT DNAME DEPT_NAME, DEPTNO ºÎ¼­¹øÈ£ FROM DEPARTMENT;
+
+-- ºÎ¼­Å×ÀÌºí¿¡¼­ºÎ¼­ÀÌ¸§Ä®·³ÀÇº°¸íÀº¡°Department Name¡±, ºÎ¼­¹øÈ£Ä®·³ÀÇº°¸íÀº¡°ºÎ¼­¹øÈ£#¡±À¸·ÎºÎ¿©ÇÏ¿©­t·ÂÇÏ¿©¶ó
+SELECT DNAME "DEPARTMENT NAME", DEPTNO "ºÎ¼­¹øÈ£" FROM DEPARTMENT;
+
+-- ÇÐ»ýÅ×ÀÌºí¿¡¼­ÇÐ¹ø°úÀÌ¸§Ä®·³À»¿¬°áÇÏ¿©¡°Student¡±¶ó´Âº°¸íÀ¸·ÎÇÏ³ªÀÇÄ®·³Ã³·³¿¬°áÇÏ¿©­t·ÂÇÏ¿©¶ó
+SELECT STUDNO || ' ' || NAME STUDENT FROM STUDENT;
+
+-- ÇÐ»ýÀÇ¸ö¹«°Ô¸¦pound·ÎÃQ»êÇÏ°íÄ®·³ÀÌ¸§À»?weight_pound?¶ó´Âº°¸íÀ¸·Î­t·ÂÇÏ¿©¶ó. 1kgÀº2.2poundÀÌ´Ù.
+SELECT NAME, WEIGHT, WEIGHT * 2.2 || 'POUND' WEIGHT_POUND FROM STUDENT;
+
+-- ÇÐ»ýÅ×ÀÌºí¿¡¼­1ÇÐ³âÇÐ»ý¢°Ë»öÇÏ¿©ÇÐ¹ø, ÀÌ¸§, ÇÐ°ú¹øÈ£¸¦­t·ÂÇÏ¿©¶ó
+SELECT STUDNO, NAME, DEPTNO 
+FROM STUDENT
+WHERE GRADE = 1;
+
+-- ÇÐ»ýÅ×ÀÌºí¿¡¼­¸ö¹«°Ô°¡70kg ÀÌÇÏÀÎÇÐ»ý¢°Ë»öÇÏ¿©ÇÐ¹ø, ÀÌ¸§, ÇÐ³â, ÇÐ°ú¹øÈ£, ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó.
+SELECT STUDNO, NAME, GRADE, DEPTNO, WEIGHT 
+FROM STUDENT
+WHERE WEIGHT <= 70;
+
+-- ÇÐ»ýÅ×ÀÌºí¿¡¼­1ÇÐ³âÀÌ¸é¼­¸ö¹«°Ô°¡70kg ÀÌ»óÀÎÇÐ»ý¢°Ë»öÇÏ¿©ÀÌ¸§, ÇÐ³â, ¸ö¹«°Ô, ÇÐ°ú¹øÈ£¸¦­t·ÂÇÏ¿©¶ó.
+SELECT NAME, GRADE, WEIGHT, DEPTNO
+FROM STUDENT
+WHERE GRADE = 1
+AND WEIGHT >= 70;
+
+-- BETWEEN ¿¬»êÀÚ¸¦»ç¿ëÇÏ¿©¸ö¹«°Ô°¡50kg¿¡¼­70kg »çÀÌÀÎÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó.
+SELECT DEPTNO, NAME, WEIGHT
+FROM STUDENT
+WHERE WEIGHT BETWEEN 50 AND 70;

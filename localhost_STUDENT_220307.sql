@@ -1,0 +1,202 @@
+SELECT S.DEPTNO, S.NAME, GRADE, STUDNO, PROFNO, P.NAME, POSITION
+FROM STUDENT S
+FULL JOIN PROFESSOR P USING(PROFNO);
+
+SELECT * 
+FROM PROFESSOR
+WHERE POSITION = '±³¼ö';
+
+-- »ç¿ëÀÚ¾ÆÀÌµð°¡?jun123?ÀÎÇÐ»ý°ú°°ÀºÇÐ³âÀÎÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, ÇÐ³âÀ»­t·ÂÇÏ¿©¶ó´ÜÀÏÇàºñ±³¿¬»êÀÚ
+SELECT STUDNO, NAME, GRADE
+FROM STUDENT
+WHERE GRADE =
+(SELECT GRADE
+FROM STUDENT
+WHERE USERID = 'jun123');
+
+-- 101¹øÇÐ°úÇÐ»ýµéÀÇÆò±Õ¸ö¹«°Ôº¸´Ù¸ö¹«°Ô°¡ÀûÀºÇÐ»ýÀÇÀÌ¸§, ÇÐ°ú¹øÈ£, ¸ö¹«°Ô¸¦ Ãâ·ÂÇÏ¿©¶ó
+SELECT NAME, DEPTNO, WEIGHT
+FROM STUDENT
+WHERE WEIGHT <
+(SELECT AVG(WEIGHT)
+FROM STUDENT
+WHERE DEPTNO = 101);
+
+-- 20101¹øÇÐ»ý°úÇÐ³âÀÌ°°°í, Å°´Â20101¹øÇÐ»ýº¸´ÙÅ«ÇÐ»ýÀÇÀÌ¸§, ÇÐ³â, Å°¸¦ Ãâ·ÂÇÏ¿©¶ó
+SELECT GRADE
+FROM STUDENT
+WHERE STUDNO = 20101;
+
+SELECT HEIGHT
+FROM STUDENT
+WHERE STUDNO = 20101;
+
+SELECT NAME, GRADE, HEIGHT
+FROM STUDENT
+WHERE 
+    GRADE = (
+        SELECT GRADE
+        FROM STUDENT
+        WHERE STUDNO = 20101
+        )
+AND 
+    HEIGHT > (
+        SELECT HEIGHT
+        FROM STUDENT
+        WHERE STUDNO = 20101
+        );
+        
+SELECT * FROM DEPARTMENT
+WHERE COLLEGE = 100;
+
+-- Á¤º¸¹Ìµð¾îÇÐºÎ(ºÎ¼­¹øÈ£:100)¿¡¼Ò¼ÓµÈ¸ðµçÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, ÇÐ°ú¹øÈ£¸¦­t·ÂÇÏ¿©¶ó
+SELECT DEPTNO
+FROM DEPARTMENT
+WHERE COLLEGE = (
+    SELECT DEPTNO
+    FROM DEPARTMENT
+    WHERE DNAME = 'Á¤º¸¹Ìµð¾îÇÐºÎ'
+);
+
+SELECT STUDNO, NAME, DEPTNO
+FROM STUDENT
+WHERE DEPTNO IN(
+    SELECT DEPTNO
+    FROM DEPARTMENT
+    WHERE COLLEGE = (
+        SELECT DEPTNO
+        FROM DEPARTMENT
+        WHERE DNAME = 'Á¤º¸¹Ìµð¾îÇÐºÎ'
+    )
+);
+
+-- ¸ðµçÇÐ»ýÁß¿¡¼­ 4ÇÐ³â ÇÐ»ýÁß¿¡¼­ Å°°¡Á¦ÀÏÀÛÀºÇÐ»ýº¸´ÙÅ°°¡Å«ÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, Å°¸¦­t·ÂÇÏ¿©¶ó
+
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT > ANY(
+    SELECT HEIGHT 
+    FROM STUDENT
+    WHERE GRADE = 4);
+
+
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT > (
+SELECT MIN(HEIGHT)
+FROM STUDENT
+WHERE GRADE = 4);
+
+
+-- ¸ðµçÇÐ»ýÁß¿¡¼­4ÇÐ³âÇÐ»ýÁß¿¡¼­Å°°¡Á¦ÀÏ Å« ÇÐ»ýº¸´ÙÅ°°¡Å«ÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, Å°¸¦­t·ÂÇÏ¿©¶ó
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT > ALL(
+    SELECT HEIGHT 
+    FROM STUDENT
+    WHERE GRADE = 4
+    );
+
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT > (
+SELECT MAX(HEIGHT)
+FROM STUDENT
+WHERE GRADE = 4);
+
+-- ¸ðµçÇÐ»ýÁß¿¡¼­4ÇÐ³âÇÐ»ýÁß¿¡¼­Å°°¡Á¦ÀÏ Å«ÇÐ»ýº¸´Ù Å°°¡ ÀÛÀº ÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, Å°¸¦­t·ÂÇÏ¿©¶ó
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT < ANY (
+    SELECT HEIGHT 
+    FROM STUDENT
+    WHERE GRADE = 4);
+    
+SELECT STUDNO, NAME, HEIGHT
+FROM STUDENT
+WHERE HEIGHT < (
+    SELECT MAX(HEIGHT)
+    FROM STUDENT
+    WHERE GRADE = 4);
+    
+-- º¸Á÷¼ö´çÀ»¹Þ´Â±³¼ö°¡À™¸íÀÌ¶óµµÀÖÀ¸¸é¸ðµç±³¼öÀÇ±³¼ö¹øÈ£, ÀÌ¸§, º¸Á÷¼ö´ç±×¸®°í±Þ¿©¿Íº¸Á÷¼ö´çÀÇÇÕÀ»­t·ÂÇÏ¿©¶ó
+SELECT PROFNO, NAME, COMM, SAL+COMM
+FROM PROFESSOR
+WHERE EXISTS
+(SELECT *
+FROM PROFESSOR
+WHERE COMM IS NOT NULL);
+
+-- PAIRWISE ºñ±³¹æ¹ý¿¡ÀÇÇØÇÐ³âº°·Î¸ö¹«°Ô°¡ÃÖ¼ÒÀÎÇÐ»ýÀÇÀÌ¸§, ÇÐ³â, ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó.
+SELECT NAME, GRADE, WEIGHT
+FROM STUDENT
+WHERE (GRADE, WEIGHT) IN (
+SELECT GRADE, MIN(WEIGHT)
+FROM STUDENT
+GROUP BY GRADE);
+
+-- UNPAIRWISE ºñ±³¹æ¹ý¿¡ÀÇÇØÇÐ³âº°·Î¸ö¹«°Ô°¡ÃÖ¼ÒÀÎÇÐ»ýÀÇÀÌ¸§, ÇÐ³â, ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó.
+
+SELECT NAME, GRADE, WEIGHT
+FROM STUDENT
+WHERE GRADE IN(
+    SELECT GRADE
+    FROM STUDENT
+    GROUP BY GRADE)
+AND WEIGHT IN(
+    SELECT MIN(WEIGHT)
+    FROM STUDENT
+    GROUP BY GRADE
+)
+ORDER BY 2;
+
+-- °¢ ÇÐ°úÇÐ»ýÀÇ Æò±ÕÅ°º¸´Ù Å°°¡ Å« ÇÐ»ýÀÇÀÌ¸§, ÇÐ°ú¹øÈ£, Å°¸¦ Ãâ·ÂÇÏ¿©¶ó
+SELECT DEPTNO, AVG(HEIGHT)
+FROM STUDENT
+GROUP BY DEPTNO;
+
+SELECT STUDNO, NAME, DEPTNO, HEIGHT
+FROM STUDENT S1
+WHERE HEIGHT > (
+    SELECT AVG(HEIGHT)
+    FROM STUDENT S2
+    WHERE S1.DEPTNO = S2.DEPTNO
+GROUP BY DEPTNO);
+
+-- ÇÐ¹ø, ÀÌ¸§, ÇÐ°ú¹øÈ£, ÇÐ°úÀÌ¸§À» Á¶ÀÎ, ¼­ºêÄõ¸®
+-- Á¶ÀÎ
+SELECT STUDNO, NAME, DEPTNO, DNAME
+FROM STUDENT
+JOIN DEPARTMENT USING(DEPTNO);
+
+-- ¼­ºêÄõ¸®
+SELECT STUDNO, NAME, S.DEPTNO, (SELECT DNAME FROM DEPARTMENT D WHERE D.DEPTNO = S.DEPTNO) DNAME
+FROM STUDENT S;
+
+SELECT STUDNO, NAME, PROFNO, (SELECT NAME FROM PROFESSOR P WHERE P.PROFNO = S.PROFNO) PNAME
+, (SELECT DNAME FROM DEPARTMENT D WHERE D.DEPTNO = S.DEPTNO) DNAME
+FROM STUDENT S;
+
+
+-- DDL, DML, DCL
+-- D´Â DATA, LÀº LANGUAGE
+-- DDL : DATA DEFINITION LANGUAGE µ¥ÀÌÅÍ Á¤ÀÇ¾î
+-- CREATE, ALTER, DROP, TRUNCATE, REPLACE, ... (Å×ÀÌºí¸¦ ¸¸µé¶§)
+
+-- DML : DATA MANUFACTIUAL LANGUAGE Å×ÀÌÅÍ Á¶ÀÛ¾î
+-- INSERT, UPDATE, DELETE, MERGE, ...(Å×ÀÌºí ³»ÀÇ Á¶ÀÛ¾î)
+
+-- DCL : DATA CONTROL LANGUAGE Å×ÀÌÅÍ Á¦¾î¾î
+-- COMMIT, ROLLBACK, SAVEPOINT, GRANT, REVOKE, ... (±âÅ¸ µîµî...)
+-- >> TCL 
+
+INSERT INTO STUDENT
+VALUES (10110, 'È«±æµ¿', 'hong', '1',
+'8501011143098', '85/01/01', '041)630-3114',
+170, 70, 101, 9903);
+
+SELECT * FROM STUDENT;
+
+ROLLBACK;
+
+COMMIT;

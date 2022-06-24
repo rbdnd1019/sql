@@ -1,0 +1,49 @@
+SELECT * FROM STUDENT;
+
+-- 학생의 키 순서 역순 정렬
+SELECT * FROM STUDENT ORDER BY HEIGHT DESC;
+
+-- 학생들의 인원수, 평균키, 평균 몸무게
+--SELECT COUNT(*), AVG(HEIGHT), AVG(WEIGHT) FROM STUDENT;
+
+SELECT * FROM PROFESSOR;
+SELECT * FROM DEPARTMENT;
+SELECT * FROM SALGRADE;
+
+SELECT 'HELLO WORLD' FROM DUAL;
+
+-- 학생의 학번, 이름, 학과이름을 조회
+SELECT STUDNO, NAME, DNAME
+FROM STUDENT
+NATURAL JOIN DEPARTMENT;
+-- 같은 내용
+SELECT STUDNO, NAME, (SELECT DNAME FROM DEPARTMENT D WHERE D.DEPTNO = S.DEPTNO) AS DNAME
+FROM STUDENT S;
+
+
+-- 현재 접속한 데이터베이스 계정에 생성된 모든 테이블 이름을 확인하여라
+SELECT * FROM TAB;
+
+-- 학생테이블(student)의구조를확인하여라
+DESC STUDENT;
+
+SELECT SYSDATE -3 FROM DUAL;
+
+SELECT 1000 * 200 FROM DUAL;
+
+SELECT * FROM DUAL;
+
+-- 부서테이블에서 부서이름(dname)과 부서번호(deptno)를 출력하여라
+SELECT DNAME, DEPTNO FROM DEPARTMENT;
+
+
+/*
+웹 프로그래머 >>
+프론트 개발자 JS, JSP, JAVA
+백엔드 개발자 JAVA, DB
+
+DB : 정확히 시간에 비례
+
+JOIN, SBUQUERY, AGGREGATE
+
+*/

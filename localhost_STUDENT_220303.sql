@@ -1,0 +1,215 @@
+-- ±³¼öÅ×ÀÌºí¿¡¼­¼Ò¼ÓÇÐ°ú¿¡µû¶óº¸³Ê½º¸¦´Ù¸£°Ô°è»êÇÏ¿©­t·ÂÇÏ¿©¶ó. ÇÐ°ú¹øÈ£º°·Îº¸³Ê½º´Â´ÙÀ½°ú°°ÀÌ°è»êÀ™´Ù.
+-- ÇÐ°ú¹øÈ£°¡101ÀÌ¸éº¸³Ê½º´Â±Þ¿©ÀÇ10%, 102ÀÌ¸é20%, 201ÀÌ¸é30%, ³ª¸ÓÁöÇÐ°ú´Â0%ÀÌ´Ù.
+SELECT * FROM PROFESSOR;
+SELECT PROFNO, NAME, SAL, DEPTNO FROM PROFESSOR;
+SELECT
+    PROFNO, NAME, SAL, DEPTNO,
+    DECODE(DEPTNO,
+        101, SAL * 0.1,
+        102, SAL * 0.2,
+        201, SAL * 0.3,
+        0) BOUNUS,
+        CASE 
+            WHEN DEPTNO = 101 THEN SAL * 0.1
+            WHEN DEPTNO = 102 THEN SAL * 0.2
+            WHEN DEPTNO = 201 THEN SAL * 0.3
+            ELSE 0
+        END BOUNUS2,
+        --°°Àº ³»¿ë
+        CASE DEPTNO
+            WHEN 101 THEN SAL * 0.1
+            WHEN 102 THEN SAL * 0.2
+            WHEN 201 THEN SAL * 0.3
+            ELSE 0
+        END BOUNUS3
+FROM PROFESSOR;
+
+SELECT STUDNO, NAME, BIRTHDATE,
+    TO_CHAR(BIRTHDATE,'MM') M,
+CASE
+        WHEN TO_CHAR(BIRTHDATE,'MM') IN (3, 4, 5) THEN 'º½'
+        WHEN TO_CHAR(BIRTHDATE,'MM') BETWEEN 6 AND 8 THEN '¿©¸§'
+        WHEN TO_CHAR(BIRTHDATE,'MM') BETWEEN 9 AND 11 THEN '°¡À»'
+        ELSE '°Ü¿ï'
+END SEASON
+FROM STUDENT;
+
+SELECT
+    STUDNO, NAME,
+    CASE
+        WHEN TO_CHAR(BIRTHDATE,'MM') IN (3, 4, 5) THEN 'º½'
+        WHEN TO_CHAR(BIRTHDATE,'MM') BETWEEN 6 AND 8 THEN '¿©¸§'
+        WHEN TO_CHAR(BIRTHDATE,'MM') BETWEEN 9 AND 11 THEN '°¡À»'
+        ELSE '°Ü¿ï'
+    END SEASON
+FROM ( SELECT STUDNO, NAME, BIRTHDATE,
+    TO_CHAR(BIRTHDATE,'MM') M
+FROM STUDENT
+);
+
+SELECT STUDNO, NAME, USERID
+FROM STUDENT
+WHERE USERID >= 'DDDD';
+
+
+-- SUM AVG MAX MIN COUNT
+SELECT DEPTNO, COUNT(DEPTNO)
+FROM STUDENT
+WHERE DEPTNO IS NOT NULL
+GROUP BY DEPTNO
+HAVING COUNT(DEPTNO) <= 5;
+
+--GROUPÀº ¹­´Â °Å¶ó COUNT °¡´ÉÇÑµ¥, DISTINCT´Â Áßº¹°ª Á¦°Å¶ó Ä«¿îÆ® ºÒ°¡
+--SELECT DISTINCT DEPTNO, COUNT(DEPTNO)
+--FROM STUDENT;  
+
+SELECT COUNT(DEPTNO)
+FROM STUDENT;
+
+-- 101¹øÇÐ°ú±³¼öÁß¿¡¼­º¸Á÷¼ö´çÀ»¹Þ´Â±³¼öÀÇ¼ö¸¦­t·ÂÇÏ¿©¶ó.
+SELECT * FROM PROFESSOR;
+-- °³¼ö´Â NULLÀ» Á¦¿ÜÇÏ°í Ä«¿îÆ® ÇØÁÜ
+SELECT COUNT(COMM), COUNT(*)
+FROM PROFESSOR
+WHERE DEPTNO = 101;
+
+SELECT COUNT(*) 
+FROM PROFESSOR
+WHERE DEPTNO = 101 AND COMM IS NOT NULL;
+
+-- 101¹øÇÐ°úÇÐ»ýµéÀÇ¸ö¹«°ÔÆò±Õ°úÇÕ°è¸¦­t·ÂÇÏ¿©¶ó.
+SELECT * FROM STUDENT;
+SELECT 
+    AVG(WEIGHT), SUM(WEIGHT), SUM(WEIGHT) / COUNT(WEIGHT) 
+FROM STUDENT
+WHERE DEPTNO = 101;
+
+-- 102¹øÇÐ°úÇÐ»ýÁß¿¡¼­ÃÖ´ëÅ°¿ÍÃÖ¼ÒÅ°¸¦­t·ÂÇÏ¿©¶ó.
+SELECT * FROM STUDENT;
+SELECT MAX(HEIGHT), MIN(HEIGHT), MAX(WEIGHT), MIN(WEIGHT) 
+FROM STUDENT
+WHERE DEPTNO = 102;
+
+SELECT  COUNT(DEPTNO)
+FROM STUDENT
+GROUP BY DEPTNO;
+
+SELECT DEPTNO, POSITION, COUNT(*)
+FROM PROFESSOR
+GROUP BY DEPTNO, POSITION;
+
+-- ±³¼öÅ×ÀÌºí¿¡¼­ÇÐ°úº°·Î±³¼ö¼ö¿Íº¸Á÷¼ö´çÀ»¹Þ´Â±³¼ö¼ö¸¦­t·ÂÇÏ¿©¶ó
+SELECT * FROM PROFESSOR;
+SELECT DEPTNO, COUNT(*), COUNT(COMM)
+FROM PROFESSOR
+GROUP BY DEPTNO;
+
+-- ÇÐ°úº°·Î¼Ò¼Ó±³¼öµéÀÇÆò±Õ±Þ¿©, ÃÖ¼Ò±Þ¿©, ÃÖ´ë±Þ¿©¸¦­t·ÂÇÏ¿©¶ó.
+SELECT * FROM PROFESSOR;
+SELECT DEPTNO, AVG(SAL), MIN(SAL), MAX(SAL)
+FROM PROFESSOR
+GROUP BY DEPTNO;
+
+-- ÀüÃ¼ÇÐ»ýÀ» ¼Ò¼ÓÇÐ°úº°·Î ³ª´©°í, °°ÀºÇÐ°ú ÇÐ»ýÀº ´Ù½Ã ÇÐ³âº°·Î ±×·ìÇÎÇÏ¿©,
+-- ÇÐ°ú¿Í ÇÐ³âº° ÀÎ¿ø¼ö, Æò±Õ¸ö¹«°Ô¸¦ Ãâ·ÂÇÏ¿©¶ó, ´Ü, Æò±Õ¸ö¹«°Ô´Â ¼Ò¼öÁ¡ ÀÌÇÏ Ã¹¹øÂ°ÀÚ¸®¿¡¼­ ¹Ý¿Ã¸² ÇÑ´Ù
+SELECT * FROM STUDENT;
+SELECT DEPTNO, GRADE, COUNT(DEPTNO), ROUND(AVG(WEIGHT))
+FROM STUDENT
+GROUP BY DEPTNO, GRADE;
+
+-- ¼Ò¼ÓÇÐ°úº°·Î±³¼ö±Þ¿©ÇÕ°è¿Í¸ðµçÇÐ°ú±³¼öµéÀÇ±Þ¿©ÇÕ°è¸¦­t·ÂÇÏ¿©¶ó
+SELECT DEPTNO, SUM(SAL)
+FROM PROFESSOR
+GROUP BY DEPTNO;
+
+SELECT DEPTNO, SUM(SAL)
+FROM PROFESSOR
+GROUP BY ROLLUP(DEPTNO);
+
+-- ROLLUP ¿¬»êÀÚ¸¦ÀÌ¿ëÇÏ¿©ÇÐ°ú¹×Á÷±Þº°±³¼ö¼ö, ÇÐ°úº°±³¼ö¼ö,  †Ã¼±³¼ö¼ö¸¦­t·ÂÇÏ¿©¶ó.
+SELECT DEPTNO, POSITION, COUNT(*)
+FROM PROFESSOR
+--GROUP BY CUBE(DEPTNO, POSITION);
+GROUP BY ROLLUP(DEPTNO, POSITION);
+
+SELECT DEPTNO, POSITION, COUNT(*), GROUPING(DEPTNO), GROUPING(POSITION)
+FROM PROFESSOR
+--GROUP BY CUBE(DEPTNO, POSITION);
+GROUP BY ROLLUP(DEPTNO, POSITION);
+
+-- ÇÐ»ý¼ö°¡4¸íÀÌ»óÀÎÇÐ³â¿¡´ëÇØ¼­ÇÐ³â, ÇÐ»ý¼ö, Æò±ÕÅ°, Æò±Õ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó. 
+-- ´Ü, Æò±ÕÅ°¿ÍÆò±Õ¸ö¹«°Ô´Â¼Ò¼öÁ¡«Q¹øÂ°ÀÚ¸®¿¡¼­¹Ý¿Ã¸²ÇÏ°í, ­t·Â¼ø¼­´ÂÆò±ÕÅ°°¡³ôÀº¼øºÎÅÍ³»¸²Â÷¼øÀ¸·Î­t·ÂÇÏ¿©¶ó.
+SELECT * FROM STUDENT;
+SELECT GRADE, COUNT(*), ROUND(AVG(HEIGHT)), ROUND(AVG(WEIGHT))
+FROM STUDENT
+WHERE GRADE IS NOT NULL
+GROUP BY GRADE
+HAVING COUNT(*) >= 4
+ORDER BY AVG(HEIGHT) DESC;
+
+-- ÇÐ°úº°ÇÐ»ýÀÇÆò±Õ¸ö¹«°ÔÁßÃÖ´ëÆò±Õ¸ö¹«°Ô¸¦­t·ÂÇÏ¿©¶ó
+SELECT * FROM STUDENT;
+SELECT MAX(AVG(WEIGHT))
+FROM STUDENT
+GROUP BY DEPTNO;
+
+
+SELECT DEPTNO, A_WEIGHT
+FROM
+    (SELECT DEPTNO, AVG(WEIGHT) A_WEIGHT
+    FROM STUDENT
+    GROUP BY DEPTNO) A,
+    (SELECT MAX(AVG(WEIGHT)) B_WEIGHT
+    FROM STUDENT
+    GROUP BY DEPTNO) B
+WHERE B.B_WEIGHT = A.A_WEIGHT
+;
+
+SELECT STUDNO, NAME, D.DEPTNO, DNAME
+FROM STUDENT S, DEPARTMENT D
+WHERE S.DEPTNO = D.DEPTNO;
+
+-- ³»ºÎ Á¶ÀÎ : NULL ºñÆ÷ÇÔ
+-- ¿ÜºÎ Á¶ÀÎ : NULLÆ÷ÇÔ
+
+SELECT *
+FROM
+    (
+    SELECT ROWNUM A
+    FROM DICT
+    WHERE ROWNUM <= 4
+    ) A,
+    (SELECT (ROWNUM-1) * 2 + 1 B
+    FROM DICT
+    WHERE ROWNUM <= 3
+    ) B
+WHERE A.A = B.B;
+
+SELECT (ROWNUM-1) * 3 + 1
+FROM DICT
+WHERE ROWNUM <=3;
+
+-- ?? †ÀÎÇÏ?ÇÐ»ýÀÇÇÐ¹ø, ÀÌ¸§, ÇÐ°úÀÌ¸§±×¸®°íÇÐ°úÀ§Ä¡¸¦­t·ÂÇÏ¿©¶ó.
+SELECT STUDNO, NAME, DNAME, LOC
+FROM STUDENT S, DEPARTMENT D
+WHERE NAME = 'ÀüÀÎÇÏ' AND S.DEPTNO = D.DEPTNO;
+
+SELECT STUDNO, NAME, DNAME, LOC
+FROM STUDENT
+NATURAL JOIN DEPARTMENT
+WHERE NAME = 'ÀüÀÎÇÏ';
+
+-- ÇÐ¹ø, ÇÐ»ýÀÌ¸§, ±³¼ö¹øÈ£, ´ã´ç±³¼öÀÌ¸§
+SELECT STUDNO, S.NAME, P.PROFNO, P.NAME 
+FROM STUDENT S, PROFESSOR P
+WHERE S.PROFNO = P.PROFNO;
+
+SELECT * FROM PROFESSOR;
+
+SELECT STUDNO, S.NAME, P.PROFNO, P.NAME 
+FROM STUDENT S
+JOIN PROFESSOR P ON S.PROFNO = P.PROFNO;
+
+SELECT STUDNO, S.NAME, PROFNO, P.NAME 
+FROM STUDENT S
+JOIN PROFESSOR P USING (PROFNO);
